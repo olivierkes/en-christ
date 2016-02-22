@@ -124,7 +124,8 @@ def custom_formats(html):
                 "do": "color-left green",
                 "discussion": "color-left blue",
                 "prayer": "color-left yellow",
-                "next-time": "light blue"}[t.group(1)]
+                "next-time": "light blue",
+                "":""}[t.group(1)]
             )+"<p></p>"
         )
     )
@@ -132,6 +133,9 @@ def custom_formats(html):
     patterns += [
         ("<H3>(.*?)</H3>",
          '<div class="sub-title"><span>\\1</span></div>'
+        ),
+        ("<H5>(.*?)</H5>",
+         '<span class="subhead">\\1</span>'
         ),
     ]    
     
