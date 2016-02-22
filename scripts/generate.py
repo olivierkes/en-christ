@@ -44,8 +44,9 @@ templates = {
 
 
 class page:
-    def __init__(self, title=None, html=None, slug=None, icon_class=None, icon_title=None):
+    def __init__(self, title=None, subtitle=None, html=None, slug=None, icon_class=None, icon_title=None):
         self.title = title
+        self.subtitle = subtitle
         self.html = html
         self.slug = slug
         self.icon_class = icon_class
@@ -66,16 +67,19 @@ def generate_main_menu(pages, current_page, custom_class=""):
     tpl = """
     <li class="{CLASS}">
         <a href="{SLUG}">
-            <span class="icon {ICON_CLASS}">{ICON_TITLE}</span><span class="title">{TITLE}</span>
+            <span class="icon {ICON_CLASS}">{ICON_TITLE}</span>
+            <span class="title">{TITLE}</span>
         </a>
+        <span class="badge">{SUBTITLE}</span>
     </li>"""
     for p in pages:
         menu += tpl.format(
             CLASS = ("active" if p == current_page else "") + " " + custom_class,
             SLUG = p.slug,
             TITLE = p.title,
+            SUBTITLE = p.subtitle,
             ICON_CLASS = p.icon_class,
-            ICON_TITLE = p.icon_title
+            ICON_TITLE = p.icon_title,
             )
     return menu
 
@@ -171,8 +175,10 @@ pages = []
 for entry in TOC:
     f = entry[0]
     print("Loading page '{}': ".format(f), end="")
+    header = load_file("src/{}.t2t".format(f)).split("\n")[0:3]
     p = page(
-        title = load_file("src/{}.t2t".format(f)).split("\n")[0],
+        title = header[0],
+        subtitle = header[1],
         html = load_file("src/{}.html".format(f)),
         slug = "{}.html".format(f),
         icon_class = entry[1],
@@ -190,7 +196,7 @@ for p in pages:
 for p in pages:
     c = templates["Base"].substitute(
         PAGE_TITLE = PAGE_TITLE,
-        BREADCRUMB = p.title,
+        BREADCRUMB = "{} <span class='subtitle'>({})</span>".format(p.title, p.subtitle) if p.subtitle else p.title,
         MENU_TITLE = MENU_TITLE,
         COPYRIGHT = COPYRIGHT,
         VERSION = VERSION,
