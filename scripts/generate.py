@@ -100,17 +100,11 @@ def custom_formats(html):
     
     # Cards (with H2 tags)
     patterns += [
-        ("<H2>(.*?)</H2>(.*?)(?=<H2>)",
+        ("<H2>(.*?)</H2>(.*?)(?=<H2>|$)",
          templates["Card"].substitute(
              TITLE="\\1",
              BODY="\\2",
              ) + "\n<p></p>\n"
-        ),
-        ("<H2>(.*?)</H2>(.*?)$",
-         templates["Card"].substitute(
-             TITLE="\\1",
-             BODY="\\2",
-             ) + "\n<p></p>"
         ),
         ("<H3>(.*?)</H3>",
          '<div class="sub-title"><span>\\1</span></div>'
