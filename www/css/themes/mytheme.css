@@ -18,6 +18,39 @@ li.list-group-item span.icon{
     margin-bottom: -10px !important;
 }
 
+/* MENU */
+
+/* Top navbar */
+
+.navbar-breadcrumb li > span.subtitle {color: #AAA;}
+
+/* Badges */
+
+.navbar-nav .badge{
+    margin-left: 60px;
+    background-color: transparent;
+    padding:0px;
+    color: #aaa;
+    font-size: .8em;
+    margin-top: -40px;
+    font-weight: normal;
+}
+.flat-blue .side-menu.sidebar-inverse .navbar li {height: 60px;}
+.flat-blue .side-menu.sidebar-inverse .navbar li.active{
+    background:#fff;
+    border-left: 3px solid #22A7F0;
+}
+.flat-blue .side-menu.sidebar-inverse .navbar li.active > a{
+    background:transparent;
+    border-left: 0px;
+}
+
+.list-group .list-group-item .badge {
+    color: #999;
+    background-color: transparent;
+    font-weight: normal;
+}
+
 /* CARDS */
 
 .card{border-radius: 4px;}
@@ -87,8 +120,22 @@ li.list-group-item span.icon{
     color:#333;
 }
 
+.card .card-jumbotron {
+    background-color:#CCC;
+    background-image: url("../../img/thumbnails/picjumbo.com_IMG_3241.jpg");
+    background-size: cover;
+}
+
 .flat-blue .card .card-body .sub-title{border-bottom: none;}
 .flat-blue .card .card-body .sub-title span{border-bottom: 1px solid rgb(200, 200, 200);}
+
+
+@media (max-width: 768px) {
+    .navbar {min-height: 40px;}
+    .navbar > .container-fluid .navbar-expand-toggle{height: 40px;}
+    .navbar .navbar-breadcrumb > li {height: 40px; line-height: 40px;}
+}
+
 
 @media (min-width: 768px) {
     .card.time .fa{
