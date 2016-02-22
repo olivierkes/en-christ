@@ -79,15 +79,6 @@ def generate_main_menu(pages, current_page, custom_class=""):
             )
     return menu
 
-def generate_menu(pages):
-    menu = ""
-    tpl = '<li class="list-group-item">{TITLE}</li>'
-    
-    for p in pages:
-        menu += tpl.format(TITLE=p.title)
-    
-    return '<ul class="list-group">{}</ul>'.format(menu)
-
 def custom_formats(html):
     #return html
     
