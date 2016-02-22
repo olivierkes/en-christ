@@ -1,3 +1,4 @@
 flat-admin-bootstrap-templates-master 
 .directory
 src/*.html
+www/*.html
