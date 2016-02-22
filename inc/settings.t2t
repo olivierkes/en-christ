@@ -1,0 +1,18 @@
+
+
+%!target: html
+%!encoding: utf-8
+
+
+% Square brackets
+%!preproc(html): '\[(.*)\]' '$Q$\1$Q$$'
+%!postproc(html): '\$Q\$(.*)\$Q\$\$' '[\1]'
+
+
+%Blockquote footer
+%!postproc(html): '\t°°(.*)°°' '\t<footer>\1</footer>'
+
+% Quotes
+%%!preproc(html): '"([^\s])' "«''&nbsp;''\1"
+%%!preproc(html): '([^\s])"' "\1''&nbsp;''»"
+%!preproc(html): '"([^\s].*?[^\s])"' "«\1»"
