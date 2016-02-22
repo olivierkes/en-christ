@@ -99,51 +99,48 @@ def custom_formats(html):
     )
     
     # Cards (with H2 tags)
+    #patterns += [
+        #("<H2>(.*?)</H2>(.*?)(?=<H2>|$)",
+         #templates["Card"].substitute(
+             #TITLE="\\1",
+             #BODY="\\2",
+             #CARD_CLASS="",
+             #HIDDEN="",
+             #) + "\n<p></p>\n"
+        #),
+    #]
+    
+    # Cards
+    patterns.append(
+        ("\[row:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/row]",
+         lambda t: templates["Card"].substitute(
+            TITLE=t.group(2) if t.group(2) else "",
+            BODY=t.group(3),
+            SUBHEAD = '<span class="subhead">{}</span>'.format({
+                "info": "Information",
+                "do": "Pratique",
+                "discussion": "Discussion",
+                "prayer": "Prière",
+                "next-time": "Prochaine fois"}[t.group(1)]) if t.group(1) in [
+                    "do", "discussion", "prayer", "next-time"] else "",
+            HIDDEN = "hidden" if not t.group(2) else "",
+            CARD_CLASS = {
+                "info": "",
+                "do": "color-left green",
+                "discussion": "color-left blue",
+                "prayer": "color-left yellow",
+                "next-time": "light blue"}[t.group(1)]
+            )+"<p></p>"
+        )
+    )
+    
     patterns += [
-        ("<H2>(.*?)</H2>(.*?)(?=<H2>)",
-         templates["Card"].substitute(
-             TITLE="\\1",
-             BODY="\\2",
-             ) + "\n<p></p>\n"
-        ),
-        ("<H2>(.*?)</H2>(.*?)$",
-         templates["Card"].substitute(
-             TITLE="\\1",
-             BODY="\\2",
-             ) + "\n<p></p>"
-        ),
         ("<H3>(.*?)</H3>",
          '<div class="sub-title"><span>\\1</span></div>'
         ),
-    ]
-    
-    # Circles
-    circles = [
-        ("info", "fa-info", "blue", "Information"),
-        ("do", "fa-wrench", "green", "Mise en pratique"),
-        ("discussion", "fa-comments", "yellow", "Discussion"),
-    ]
-    
-    for c in circles:
-        patterns.append(
-            ("\[row:{}\]".format(c[0]),
-             "[row/]"+templates["Circle"].substitute(
-                ICON=c[1],
-                COLOR=c[2],
-                TYPE=c[3]
-                )+"[/row/]"
-            )
-        )
-        
+    ]    
     
     patterns += [
-        # Close row
-        ("\[row/\](.*?)\[/row/\](.*?)\[\/row]",
-         templates["Column"].substitute(
-            CONTENT_LEFT="\\1",
-            CONTENT_RIGHT="\\2"
-            )
-         ),
          # More infos
          ("\[\+,*\s*(.*?)\]" + \
           "(.*?)" + \
