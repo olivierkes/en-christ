@@ -83,6 +83,33 @@ def generate_main_menu(pages, current_page, custom_class=""):
             )
     return menu
 
+# Feed
+def get_feed(url):
+    import feedparser
+    import time
+    d = feedparser.parse(url)
+    r = '<ul class="list-group">'
+    i = 0
+    for e in reversed(d.entries):
+        i += 1
+        r += '''<li class="list-group-item">
+                    <a href="{URL}" target="_blank">
+                        <span class="icon fa fa-play">{n}</span>
+                        <span class="title">{TITLE}</span>
+                    </a>
+                    <span class="badge">{DATE}</span>
+                </li>'''.format(
+            n = "", #str(i),
+            URL = e.link,
+            TITLE = e.title,
+            DATE = time.strftime('%Y-%m-%d', e.published_parsed)
+            
+            #"{Y}-{M}-{D}".format(
+                #Y=e.published_parsed[
+        )
+    r += "</ul>"
+    return r
+
 def custom_formats(html):
     #return html
     
@@ -130,6 +157,7 @@ def custom_formats(html):
         )
     )
     
+    # Titles
     patterns += [
         ("<H3>(.*?)</H3>",
          '<div class="sub-title"><span>\\1</span></div>'
@@ -139,8 +167,9 @@ def custom_formats(html):
         ),
     ]    
     
+    # Others
     patterns += [
-         # More infos
+        # More infos
          ("\[\+,*\s*(.*?)\]" + \
           "(.*?)" + \
           "\[/\+\]",
@@ -149,9 +178,15 @@ def custom_formats(html):
              CONTENT=t.group(2),
              ID="mi-{}".format(random.randint(0,999999999)))
         ),
-         
+        
+        # Menu
         ("\[tpl:menu\]",
         '<ul class="list-group">{}</ul>'.format(generate_main_menu(pages, None, custom_class="list-group-item"))
+        ),
+        
+        # Feed
+        ("\[feed:(https?://[\da-z\.-]+\.[a-z\.]{2,6}(?:[\/\w\.-]*?)*?\/?)\]",
+        lambda m: get_feed(m.group(1))
         ),
         
     ]

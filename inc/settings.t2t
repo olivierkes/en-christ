@@ -5,8 +5,8 @@
 
 
 % Square brackets
-%!preproc(html): '\[(.*)\]' '$Q$\1$Q$$'
-%!postproc(html): '\$Q\$(.*)\$Q\$\$' '[\1]'
+%!preproc(html): '\[(.*?)\]' "$Q$''\1''$Q$$"
+%!postproc(html): '\$Q\$(.*?)\$Q\$\$' '[\1]'
 
 
 %Blockquote footer
