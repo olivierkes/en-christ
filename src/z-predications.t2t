@@ -4,7 +4,7 @@ Prédications
 
 =Prédications=
 
-[row]
+[card]
 
 =====Olivier Keshavjee=====
 
@@ -12,8 +12,8 @@ Prédications
 
 '''
 <div class='alert alert-warning' role='alert'>
-    <strong>La série est en court.</strong> D'autres prédications apparaîtront bientôt.
+    <strong>La série est en cour.</strong> D'autres prédications apparaîtront bientôt.
 </div>
 '''
 
-[/row]
+[/card]

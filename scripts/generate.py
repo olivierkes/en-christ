@@ -4,6 +4,7 @@
 from string import Template
 import re
 import random
+import time
 
 # Templates
 #------------------------
@@ -29,9 +30,9 @@ import random
 # - ID
 
 
-VERSION = "0.1"
+VERSION = "0.1 - {} ".format(time.strftime("%d/%m/%Y"))
 MENU_TITLE = "En Christ"
-COPYRIGHT = "Copyleft (CC-BY-SA)"
+COPYRIGHT = "Copyleft (CC-BY-SA) - <a href='http://www.theologeek.ch'>Olivier Keshavjee</a>"
 PAGE_TITLE = "De l'identité en crise à l'identité en Christ"
 
 templates = {
@@ -40,6 +41,7 @@ templates = {
     "Circle": "templates/circle.tpl",
     "MoreInfos": "templates/more-infos.tpl",
     "Card":     "templates/card.tpl",
+    "Thumbnail":    "templates/thumbnail.tpl",
 }
 
 
@@ -134,7 +136,7 @@ def custom_formats(html):
     
     # Cards
     patterns.append(
-        ("\[row:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/row]",
+        ("\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card]",
          lambda t: templates["Card"].substitute(
             TITLE=t.group(2) if t.group(2) else "",
             BODY=t.group(3),
@@ -188,6 +190,19 @@ def custom_formats(html):
         ("\[feed:(https?://[\da-z\.-]+\.[a-z\.]{2,6}(?:[\/\w\.-]*?)*?\/?)\]",
         lambda m: get_feed(m.group(1))
         ),
+        
+        # Thumbnail
+        ("\[img:([\w\d\./\-_]*?)\](.*?)\[\/img]",
+         lambda t: templates["Thumbnail"].substitute(
+            SRC=t.group(1),
+            CAPTION=t.group(2)
+            )+"<p></p>"
+        ),
+        
+        # Columns
+        ("\[row\](.*?)\[/row\]", '<div class="row no-margin">\\1</div>'),
+        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="col-xs-\\1">\\2</div>'),
+        
         
     ]
     for p,sub in patterns:

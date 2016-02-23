@@ -18,6 +18,9 @@ li.list-group-item span.icon{
     margin-bottom: -10px !important;
 }
 
+/* MORE INFOS */
+
+.more-infos{color: #357CA4;}
 
 /* MENU */
 
@@ -140,7 +143,7 @@ li.list-group-item span.icon{
             margin-left: 0px;
             margin-right: 0px;
     }
-    
+    .app-container .app-footer{left: 0px;}
 }
 
 
