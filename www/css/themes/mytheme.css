@@ -18,6 +18,7 @@ li.list-group-item span.icon{
     margin-bottom: -10px !important;
 }
 
+
 /* MENU */
 
 /* Top navbar */
@@ -129,11 +130,17 @@ li.list-group-item span.icon{
 .flat-blue .card .card-body .sub-title{border-bottom: none;}
 .flat-blue .card .card-body .sub-title span{border-bottom: 1px solid rgb(200, 200, 200);}
 
-
+/* Small screen */
 @media (max-width: 768px) {
     .navbar {min-height: 40px;}
     .navbar > .container-fluid .navbar-expand-toggle{height: 40px;}
     .navbar .navbar-breadcrumb > li {height: 40px; line-height: 40px;}
+    
+    .app-container .content-container .side-body {
+            margin-left: 0px;
+            margin-right: 0px;
+    }
+    
 }
 
 
