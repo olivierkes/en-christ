@@ -2,12 +2,13 @@
 blockquote{border-left-color: #ddd;}
 
 .side-body p{
-    font-size: 16px;
+/*     font-size: 16px; */
     margin: 0 0 1em;
 }
-.side-body li{
+/*.side-body li{
     font-size: 16px;
-}
+}*/
+body{ font-size: 16px;}
 
 li.list-group-item span.icon{
     margin-right: 1em;
@@ -17,14 +18,52 @@ li.list-group-item span.icon{
     margin-bottom: -10px !important;
 }
 
-.card.yellow .fa{color: orange;}
-.card.yellow .card-body{background-color: #fff3d6;}
-.card.blue .fa{color: blue;}
-.card.blue .card-body{background-color: #d6d6ff;}
-.card.green .fa{color: green;}
-.card.green .card-body{background-color: #dbffd6;}
+/* MORE INFOS */
 
+.more-infos{color: #357CA4;}
 
+/* MENU */
+
+/* Top navbar */
+
+.navbar-breadcrumb li > span.subtitle {color: #AAA;}
+
+/* Badges */
+
+.navbar-nav .badge{
+    margin-left: 60px;
+    background-color: transparent;
+    padding:0px;
+    color: #aaa;
+    font-size: .8em;
+    margin-top: -40px;
+    font-weight: normal;
+}
+.flat-blue .side-menu.sidebar-inverse .navbar li {height: 60px;}
+.flat-blue .side-menu.sidebar-inverse .navbar li.active{
+    background:#fff;
+    border-left: 3px solid #22A7F0;
+}
+.flat-blue .side-menu.sidebar-inverse .navbar li.active > a{
+    background:transparent;
+    border-left: 0px;
+}
+
+.list-group .list-group-item .badge {
+    color: #999;
+    background-color: transparent;
+    font-weight: normal;
+}
+
+/* CARDS */
+
+.card{border-radius: 4px;}
+.card .subhead{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: .9em;
+    color: #666;
+}
+/* CARDS: TIME (MACHIN RONDS PLUS UTILISÉS) */
 .card.time{
     overflow: visible;
     width: 100%;
@@ -44,12 +83,12 @@ li.list-group-item span.icon{
 /*     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2); */
     margin: 0 auto;
 }
-.card.summary-inline.time .content .title{
+.card.time.summary-inline.time .content .title{
     font-size: 2em;
     color: gray;
     text-align: center;
 }
-.card.summary-inline.time .content .sub-title{
+.card.time.summary-inline.time .content .sub-title{
     font-size: 1em;
     color: darkgray;
     text-align: center;
@@ -57,14 +96,56 @@ li.list-group-item span.icon{
     margin-bottom: 5px;
     padding: 0px;
 }
+.card.time.yellow .fa{color: orange;}
+.card.time.yellow .card-body{background-color: #fff3d6;}
+.card.time.blue .fa{color: blue;}
+.card.time.blue .card-body{background-color: #d6d6ff;}
+.card.time.green .fa{color: green;}
+.card.time.green .card-body{background-color: #dbffd6;}
+
+
+/* CARDS: COLOR-LEFT */
+.card.color-left{background-color: #fff !important; color:#333 !important;}
+.card.color-left .card-header .title{color:#333 !important;}
+.card.color-left.yellow{border-left: 25px solid #ffb400;}
+.card.color-left.blue{border-left: 25px solid #22A7F0;}
+.card.color-left.green{border-left: 25px solid #1ABC9C;}
+.card.color-left.red{border-left: 25px solid #FA2A00;}
+
+/* CARDS: LIGHT */
+.card.light{color: #333 !important;}
+.card.light .card-header .title{color:#333 !important;}
+.card.light.yellow{background-color: #fff3d6;}
+.card.light.blue{background-color: #d6d6ff;}
+.card.light.green{background-color: #dbffd6;}
 
 
 .card .card-summary{
     color:#333;
 }
 
+.card .card-jumbotron {
+    background-color:#CCC;
+    background-image: url("../../img/thumbnails/picjumbo.com_IMG_3241.jpg");
+    background-size: cover;
+}
+
 .flat-blue .card .card-body .sub-title{border-bottom: none;}
 .flat-blue .card .card-body .sub-title span{border-bottom: 1px solid rgb(200, 200, 200);}
+
+/* Small screen */
+@media (max-width: 768px) {
+    .navbar {min-height: 40px;}
+    .navbar > .container-fluid .navbar-expand-toggle{height: 40px;}
+    .navbar .navbar-breadcrumb > li {height: 40px; line-height: 40px;}
+    
+    .app-container .content-container .side-body {
+            margin-left: 0px;
+            margin-right: 0px;
+    }
+    .app-container .app-footer{left: 0px;}
+}
+
 
 @media (min-width: 768px) {
     .card.time .fa{

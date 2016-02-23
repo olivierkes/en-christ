@@ -5,8 +5,12 @@
 
 
 % Square brackets
-%!preproc(html): '\[(.*)\]' '$Q$\1$Q$$'
-%!postproc(html): '\$Q\$(.*)\$Q\$\$' '[\1]'
+% Double square brackets are links, so we keep them
+%!preproc(html): '\[\[(.*?)\]\]' "$L$\1$L$$"
+%!preproc(html): '\[(.*?)\]' "$Q$''\1''$Q$$"
+%!preproc(html): '\$L\$(.*?)\$L\$\$' '[\1]'
+
+%!postproc(html): '\$Q\$(.*?)\$Q\$\$' '[\1]'
 
 
 %Blockquote footer
@@ -16,3 +20,7 @@
 %%!preproc(html): '"([^\s])' "«''&nbsp;''\1"
 %%!preproc(html): '([^\s])"' "\1''&nbsp;''»"
 %!preproc(html): '"([^\s].*?[^\s])"' "«\1»"
+
+
+% Retour à la ligne
+%!postproc(html): '\\\\' '<br>'

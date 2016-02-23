@@ -4,6 +4,7 @@
 from string import Template
 import re
 import random
+import time
 
 # Templates
 #------------------------
@@ -29,9 +30,9 @@ import random
 # - ID
 
 
-VERSION = "0.1"
+VERSION = '<a href="https://github.com/olivierkes/en-christ">0.1 - {}</a> '.format(time.strftime("%d/%m/%Y"))
 MENU_TITLE = "En Christ"
-COPYRIGHT = "Copyleft (CC-BY-SA)"
+COPYRIGHT = "Copyleft (CC-BY-SA) - <a href='http://www.theologeek.ch'>Olivier Keshavjee</a>"
 PAGE_TITLE = "De l'identité en crise à l'identité en Christ"
 
 templates = {
@@ -40,12 +41,14 @@ templates = {
     "Circle": "templates/circle.tpl",
     "MoreInfos": "templates/more-infos.tpl",
     "Card":     "templates/card.tpl",
+    "Thumbnail":    "templates/thumbnail.tpl",
 }
 
 
 class page:
-    def __init__(self, title=None, html=None, slug=None, icon_class=None, icon_title=None):
+    def __init__(self, title=None, subtitle=None, html=None, slug=None, icon_class=None, icon_title=None):
         self.title = title
+        self.subtitle = subtitle
         self.html = html
         self.slug = slug
         self.icon_class = icon_class
@@ -66,27 +69,48 @@ def generate_main_menu(pages, current_page, custom_class=""):
     tpl = """
     <li class="{CLASS}">
         <a href="{SLUG}">
-            <span class="icon {ICON_CLASS}">{ICON_TITLE}</span><span class="title">{TITLE}</span>
+            <span class="icon {ICON_CLASS}">{ICON_TITLE}</span>
+            <span class="title">{TITLE}</span>
         </a>
+        <span class="badge">{SUBTITLE}</span>
     </li>"""
     for p in pages:
         menu += tpl.format(
             CLASS = ("active" if p == current_page else "") + " " + custom_class,
             SLUG = p.slug,
             TITLE = p.title,
+            SUBTITLE = p.subtitle,
             ICON_CLASS = p.icon_class,
-            ICON_TITLE = p.icon_title
+            ICON_TITLE = p.icon_title,
             )
     return menu
 
-def generate_menu(pages):
-    menu = ""
-    tpl = '<li class="list-group-item">{TITLE}</li>'
-    
-    for p in pages:
-        menu += tpl.format(TITLE=p.title)
-    
-    return '<ul class="list-group">{}</ul>'.format(menu)
+# Feed
+def get_feed(url):
+    import feedparser
+    import time
+    d = feedparser.parse(url)
+    r = '<ul class="list-group">'
+    i = 0
+    for e in reversed(d.entries):
+        i += 1
+        r += '''<li class="list-group-item">
+                    <a href="{URL}" target="_blank">
+                        <span class="icon fa fa-play">{n}</span>
+                        <span class="title">{TITLE}</span>
+                    </a>
+                    <span class="badge">{DATE}</span>
+                </li>'''.format(
+            n = "", #str(i),
+            URL = e.link,
+            TITLE = e.title,
+            DATE = time.strftime('%Y-%m-%d', e.published_parsed)
+            
+            #"{Y}-{M}-{D}".format(
+                #Y=e.published_parsed[
+        )
+    r += "</ul>"
+    return r
 
 def custom_formats(html):
     #return html
@@ -99,46 +123,55 @@ def custom_formats(html):
     )
     
     # Cards (with H2 tags)
+    #patterns += [
+        #("<H2>(.*?)</H2>(.*?)(?=<H2>|$)",
+         #templates["Card"].substitute(
+             #TITLE="\\1",
+             #BODY="\\2",
+             #CARD_CLASS="",
+             #HIDDEN="",
+             #) + "\n<p></p>\n"
+        #),
+    #]
+    
+    # Cards
+    patterns.append(
+        ("\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card]",
+         lambda t: templates["Card"].substitute(
+            TITLE=t.group(2) if t.group(2) else "",
+            BODY=t.group(3),
+            SUBHEAD = '<span class="subhead">{}</span>'.format({
+                "info": "Information",
+                "do": "Pratique",
+                "discussion": "Discussion",
+                "prayer": "Prière",
+                "next-time": "Prochaine fois"}[t.group(1)]) if t.group(1) in [
+                    "do", "discussion", "prayer", "next-time"] else "",
+            HIDDEN = "hidden" if not t.group(2) else "",
+            CARD_CLASS = {
+                "info": "",
+                "do": "color-left green",
+                "discussion": "color-left blue",
+                "prayer": "color-left yellow",
+                "next-time": "light blue",
+                "":""}[t.group(1)]
+            )+"<p></p>"
+        )
+    )
+    
+    # Titles
     patterns += [
-        ("<H2>(.*?)</H2>(.*?)(?=<H2>|$)",
-         templates["Card"].substitute(
-             TITLE="\\1",
-             BODY="\\2",
-             ) + "\n<p></p>\n"
-        ),
         ("<H3>(.*?)</H3>",
          '<div class="sub-title"><span>\\1</span></div>'
         ),
-    ]
+        ("<H5>(.*?)</H5>",
+         '<span class="subhead">\\1</span>'
+        ),
+    ]    
     
-    # Circles
-    circles = [
-        ("info", "fa-info", "blue", "Information"),
-        ("do", "fa-wrench", "green", "Mise en pratique"),
-        ("discussion", "fa-comments", "yellow", "Discussion"),
-    ]
-    
-    for c in circles:
-        patterns.append(
-            ("\[row:{}\]".format(c[0]),
-             "[row/]"+templates["Circle"].substitute(
-                ICON=c[1],
-                COLOR=c[2],
-                TYPE=c[3]
-                )+"[/row/]"
-            )
-        )
-        
-    
+    # Others
     patterns += [
-        # Close row
-        ("\[row/\](.*?)\[/row/\](.*?)\[\/row]",
-         templates["Column"].substitute(
-            CONTENT_LEFT="\\1",
-            CONTENT_RIGHT="\\2"
-            )
-         ),
-         # More infos
+        # More infos
          ("\[\+,*\s*(.*?)\]" + \
           "(.*?)" + \
           "\[/\+\]",
@@ -147,10 +180,29 @@ def custom_formats(html):
              CONTENT=t.group(2),
              ID="mi-{}".format(random.randint(0,999999999)))
         ),
-         
+        
+        # Menu
         ("\[tpl:menu\]",
         '<ul class="list-group">{}</ul>'.format(generate_main_menu(pages, None, custom_class="list-group-item"))
         ),
+        
+        # Feed
+        ("\[feed:(https?://[\da-z\.-]+\.[a-z\.]{2,6}(?:[\/\w\.-]*?)*?\/?)\]",
+        lambda m: get_feed(m.group(1))
+        ),
+        
+        # Thumbnail
+        ("\[img:([\w\d\./\-_]*?)\](.*?)\[\/img]",
+         lambda t: templates["Thumbnail"].substitute(
+            SRC=t.group(1),
+            CAPTION=t.group(2)
+            )+"<p></p>"
+        ),
+        
+        # Columns
+        ("\[row\](.*?)\[/row\]", '<div class="row no-margin">\\1</div>'),
+        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="col-xs-\\1">\\2</div>'),
+        
         
     ]
     for p,sub in patterns:
@@ -177,8 +229,10 @@ pages = []
 for entry in TOC:
     f = entry[0]
     print("Loading page '{}': ".format(f), end="")
+    header = load_file("src/{}.t2t".format(f)).split("\n")[0:3]
     p = page(
-        title = load_file("src/{}.t2t".format(f)).split("\n")[0],
+        title = header[0],
+        subtitle = header[1],
         html = load_file("src/{}.html".format(f)),
         slug = "{}.html".format(f),
         icon_class = entry[1],
@@ -196,7 +250,7 @@ for p in pages:
 for p in pages:
     c = templates["Base"].substitute(
         PAGE_TITLE = PAGE_TITLE,
-        BREADCRUMB = p.title,
+        BREADCRUMB = "{} <span class='subtitle'>({})</span>".format(p.title, p.subtitle) if p.subtitle else p.title,
         MENU_TITLE = MENU_TITLE,
         COPYRIGHT = COPYRIGHT,
         VERSION = VERSION,

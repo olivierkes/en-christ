@@ -34,3 +34,17 @@ $(function() {
     return $(".side-menu .nav .dropdown .collapse").collapse('hide');
   });
 });
+
+// My Custom Javascript: open menu on swipe
+
+$(function() {
+  $(".app-container").on("swiperight",function(){
+    $(".app-container").toggleClass("expanded", true);
+    return $(".navbar-expand-toggle").toggleClass("fa-rotate-90");
+  });
+  $(".app-container").on("swipeleft",function(){
+    $(".app-container").toggleClass("expanded", false);
+    return $(".navbar-expand-toggle").toggleClass("fa-rotate-90");
+  });
+  
+});
