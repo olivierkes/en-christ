@@ -73,6 +73,7 @@
     </div>
             <!-- Javascript Libs -->
             <script type="text/javascript" src="lib/js/jquery.min.js"></script>
+            <script type="text/javascript" src="lib/js/jquery.mobile.custom.min.js"></script>
             <script type="text/javascript" src="lib/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="lib/js/Chart.min.js"></script>
             <script type="text/javascript" src="lib/js/bootstrap-switch.min.js"></script>
