@@ -34,6 +34,7 @@ VERSION = '<a href="https://github.com/olivierkes/en-christ">0.1 - {}</a> '.form
 MENU_TITLE = "En Christ"
 COPYRIGHT = "Copyleft (CC-BY-SA) - <a href='http://www.theologeek.ch'>Olivier Keshavjee</a>"
 PAGE_TITLE = "De l'identité en crise à l'identité en Christ"
+GOOGLE_ANALYTICS_ID = "UA-35562063-1"
 
 templates = {
     "Base":   "templates/base.tpl",
@@ -42,6 +43,7 @@ templates = {
     "MoreInfos": "templates/more-infos.tpl",
     "Card":     "templates/card.tpl",
     "Thumbnail":    "templates/thumbnail.tpl",
+    "GA":       "templates/google-analytics.tpl",
 }
 
 
@@ -254,6 +256,9 @@ for p in pages:
         MENU_TITLE = MENU_TITLE,
         COPYRIGHT = COPYRIGHT,
         VERSION = VERSION,
+        GOOGLE_ANALYTICS_ID = templates["GA"].substitute(
+            ID = GOOGLE_ANALYTICS_ID
+            ) if GOOGLE_ANALYTICS_ID else "",
         MENU = generate_main_menu(pages, p),
         PAGE_CONTENT = p.html)
     write_file("www/{}".format(p.slug), c)
