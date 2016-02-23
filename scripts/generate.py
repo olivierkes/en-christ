@@ -30,7 +30,7 @@ import time
 # - ID
 
 
-VERSION = "0.1 - {} ".format(time.strftime("%d/%m/%Y"))
+VERSION = '<a href="https://github.com/olivierkes/en-christ">0.1 - {}</a> '.format(time.strftime("%d/%m/%Y"))
 MENU_TITLE = "En Christ"
 COPYRIGHT = "Copyleft (CC-BY-SA) - <a href='http://www.theologeek.ch'>Olivier Keshavjee</a>"
 PAGE_TITLE = "De l'identité en crise à l'identité en Christ"
