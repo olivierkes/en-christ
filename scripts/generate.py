@@ -138,7 +138,7 @@ def custom_formats(html):
     
     # Cards
     patterns.append(
-        ("\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card]",
+        ("(?:<[pP]>\n|)\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card](?:\n</[pP]>|)",
          lambda t: templates["Card"].substitute(
             TITLE=t.group(2) if t.group(2) else "",
             BODY=t.group(3),
