@@ -138,7 +138,7 @@ def custom_formats(html):
     
     # Cards
     patterns.append(
-        ("\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card]",
+        ("(?:<[pP]>\n|)\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card](?:\n</[pP]>|)",
          lambda t: templates["Card"].substitute(
             TITLE=t.group(2) if t.group(2) else "",
             BODY=t.group(3),
@@ -209,6 +209,18 @@ def custom_formats(html):
         
         
     ]
+    
+    # Some HTML clean-up
+    # But all of this is quite ugly
+    patterns += [
+        # Orphan <p> before <div>  (<p>[code]</p>)
+        ("<[pP]>\s*(?=<div)", ""),
+        # Orphan </p> after </div> (<p>[code]</p>)
+        ("(</div>)\s*</[pP]>", "</div>"),
+        # Orphan </p> inside <div> (<p>[code]texte</p>)
+        ("(<div[^>]*?>(?:(?!<[pP]>).)*?)</[pP]>", "\\1"),
+    ]
+    
     for p,sub in patterns:
         #while html != re.sub(p, sub, html, flags=re.DOTALL):
         html = re.sub(p, sub, html, flags=re.DOTALL)
