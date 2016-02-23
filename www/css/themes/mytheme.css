@@ -18,6 +18,12 @@ li.list-group-item span.icon{
     margin-bottom: -10px !important;
 }
 
+/* ROWS */
+
+.row > .no-margin-bottom{
+    margin-bottom: 0px !important;
+}
+
 /* MORE INFOS */
 
 .more-infos{color: #357CA4;}

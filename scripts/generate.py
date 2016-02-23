@@ -201,9 +201,11 @@ def custom_formats(html):
             )+"<p></p>"
         ),
         
-        # Columns
-        ("\[row\](.*?)\[/row\]", '<div class="row no-margin">\\1</div>'),
-        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="col-xs-\\1">\\2</div>'),
+        # Grid
+        ("\[row\](.*?)\[/row\]", '<div class="row">\\1</div>'),
+        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1">\\2</div>'),
+        ("\[col:(\d+),\s*(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1 col-sm-\\2">\\3</div>'),
+        ("\[col:(\d+),\s*(\d+),\s*(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1 col-sm-\\2 col-md-\\3">\\4</div>'),
         
         
     ]
