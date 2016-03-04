@@ -48,14 +48,14 @@ Une carte sans couleur (comme celle-ci) donne une information, plus ou moins lon
 [/card]
 
 [row]
-[col:4][card:discussion]
+[col:12,4][card:discussion]
 
 Une carte de couleur bleue suggère un sujet de **discussion**.
 [/card][/col]
-[col:4][card:do]
+[col:12,4][card:do]
 
 Une carte verte propose une activité, une **mise en pratique**, une activation.[/card][/col]
-[col:4][card:prayer]
+[col:12,4][card:prayer]
 
 Une carte de bordure jaune propose un temps de **prière**.[/card][/col]
 [/row]

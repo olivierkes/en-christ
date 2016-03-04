@@ -24,3 +24,8 @@
 
 % Retour à la ligne
 %!postproc(html): '\\\\' '<br>'
+
+
+%Exposant
+%!postproc(html): '\^(.*?)\^' '<sup style="color:#777;">\1 </sup>'
+

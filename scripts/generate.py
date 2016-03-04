@@ -30,10 +30,11 @@ import time
 # - ID
 
 
-VERSION = '<a href="https://github.com/olivierkes/en-christ">0.1 - {}</a> '.format(time.strftime("%d/%m/%Y"))
+VERSION = '<a href="https://github.com/olivierkes/en-christ">0.2 - {}</a> '.format(time.strftime("%d/%m/%Y"))
 MENU_TITLE = "En Christ"
 COPYRIGHT = "Copyleft (CC-BY-SA) - <a href='http://www.theologeek.ch'>Olivier Keshavjee</a>"
 PAGE_TITLE = "De l'identité en crise à l'identité en Christ"
+GOOGLE_ANALYTICS_ID = "UA-35562063-1"
 
 templates = {
     "Base":   "templates/base.tpl",
@@ -42,6 +43,7 @@ templates = {
     "MoreInfos": "templates/more-infos.tpl",
     "Card":     "templates/card.tpl",
     "Thumbnail":    "templates/thumbnail.tpl",
+    "GA":       "templates/google-analytics.tpl",
 }
 
 
@@ -136,7 +138,7 @@ def custom_formats(html):
     
     # Cards
     patterns.append(
-        ("\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card]",
+        ("(?:<[pP]>\n|)\[card:?([\w\-_]*?|)\](?:\s*?<H3>(.*?|)</H3>|)(.*?)\[\/card](?:\n</[pP]>|)",
          lambda t: templates["Card"].substitute(
             TITLE=t.group(2) if t.group(2) else "",
             BODY=t.group(3),
@@ -199,12 +201,26 @@ def custom_formats(html):
             )+"<p></p>"
         ),
         
-        # Columns
-        ("\[row\](.*?)\[/row\]", '<div class="row no-margin">\\1</div>'),
-        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="col-xs-\\1">\\2</div>'),
+        # Grid
+        ("\[row\](.*?)\[/row\]", '<div class="row">\\1</div>'),
+        ("\[col:(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1">\\2</div>'),
+        ("\[col:(\d+),\s*(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1 col-sm-\\2">\\3</div>'),
+        ("\[col:(\d+),\s*(\d+),\s*(\d+)\](.*?)\[/col\]", '<div class="no-margin-bottom col-xs-\\1 col-sm-\\2 col-md-\\3">\\4</div>'),
         
         
     ]
+    
+    # Some HTML clean-up
+    # But all of this is quite ugly
+    patterns += [
+        # Orphan <p> before <div>  (<p>[code]</p>)
+        ("<[pP]>\s*(?=<div)", ""),
+        # Orphan </p> after </div> (<p>[code]</p>)
+        ("(</div>)\s*</[pP]>", "</div>"),
+        # Orphan </p> inside <div> (<p>[code]texte</p>)
+        ("(<div[^>]*?>(?:(?!<[pP]>).)*?)</[pP]>", "\\1"),
+    ]
+    
     for p,sub in patterns:
         #while html != re.sub(p, sub, html, flags=re.DOTALL):
         html = re.sub(p, sub, html, flags=re.DOTALL)
@@ -254,6 +270,9 @@ for p in pages:
         MENU_TITLE = MENU_TITLE,
         COPYRIGHT = COPYRIGHT,
         VERSION = VERSION,
+        GOOGLE_ANALYTICS_ID = templates["GA"].substitute(
+            ID = GOOGLE_ANALYTICS_ID
+            ) if GOOGLE_ANALYTICS_ID else "",
         MENU = generate_main_menu(pages, p),
         PAGE_CONTENT = p.html)
     write_file("www/{}".format(p.slug), c)

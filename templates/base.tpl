@@ -87,6 +87,7 @@
             <!-- Javascript -->
             <script type="text/javascript" src="js/app.js"></script>
             <script type="text/javascript" src="js/index.js"></script>
+            $GOOGLE_ANALYTICS_ID
 </body>
 
 </html>
